@@ -1,12 +1,10 @@
 package main
 
 import (
-	"context"
+	"os"
 	"waste-tracker-web-service/database"
 
-	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 func main() {
@@ -20,28 +18,12 @@ func main() {
 	defer database.CloseMongoDB()
 
 	// setup fiber
-	app := fiber.New()
+	app := generateApp()
 
-	app.Post("/", func(c *fiber.Ctx) error {
-		// write a todo to database
-		sampleDoc := bson.M{"name": "sample todo"}
+	// get the port from the env
+	port := os.Getenv("PORT")
 
-		collection := database.GetCollection("todos")
-
-		nDoc, err := collection.InsertOne(context.TODO(), sampleDoc)
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).SendString("Error inserting todo")
-		}
-
-		// send down info about the todo
-		return c.JSON(nDoc)
-	})
-
-	// app.Get("/", func(c *fiber.Ctx) error {
-	// 	return c.SendString("Hello, World!")
-	// })
-
-	app.Listen(":3000")
+	app.Listen(":" + port)
 }
 
 func initApp() error {
@@ -60,9 +42,12 @@ func initApp() error {
 }
 
 func loadENV() error {
-	err := godotenv.Load()
-	if err != nil {
-		return err
+	goENV := os.Getenv("GO_ENV")
+	if goENV == "" {
+		err := godotenv.Load()
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
