@@ -3,7 +3,9 @@ package main
 import (
 	"os"
 	"waste-tracker-web-service/database"
+	"waste-tracker-web-service/handlers"
 
+	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 )
 
@@ -26,12 +28,29 @@ func main() {
 	app.Listen(":" + port)
 }
 
+func generateApp() *fiber.App {
+	app := fiber.New()
+
+	// create healthcheck route
+	app.Get("/health", func(c *fiber.Ctx) error {
+		return c.SendString("OK")
+	})
+
+	// create the dumptruck group and routes
+	dumptruckGroup := app.Group("/dumptrucks")
+	dumptruckGroup.Get("/", handlers.GetDumptrucks)
+	dumptruckGroup.Post("/", handlers.CreateDumptruck)
+
+	return app
+}
+
 func initApp() error {
 	// setup evn
 	err := loadENV()
 	if err != nil {
 		return err
 	}
+
 	// setup database
 	err = database.StartMongoDB()
 	if err != nil {
@@ -49,6 +68,5 @@ func loadENV() error {
 			return err
 		}
 	}
-
 	return nil
 }
