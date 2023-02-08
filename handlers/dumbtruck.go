@@ -50,13 +50,13 @@ func GetDumptrucks(c *fiber.Ctx) error {
 }
 
 // DELETE /dumptrucks/:id
-// func DeleteDumptruck(c *fiber.Ctx) error {
-// 	dumptruckCollection := database.GetCollection("dumptrucks")
-// 	id := c.Params("id")
-// 	_, err := dumptruckCollection.DeleteOne(context.TODO(), bson.M{"_id": id})
-// 	if err != nil {
-// 		return err
-// 	}
+func DeleteDumptruck(c *fiber.Ctx) error {
+	dumptruckCollection := database.GetCollection("dumptrucks")
+	id := c.Params("id")
+	_, err := dumptruckCollection.DeleteOne(context.TODO(), bson.M{"_id": id})
+	if err != nil {
+		return err
+	}
 
-// 	return c.SendStatus(fiber.StatusNoContent)
-// }
+	return c.SendStatus(fiber.StatusNoContent)
+}
