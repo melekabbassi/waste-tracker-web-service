@@ -10,5 +10,5 @@ type Route struct {
 	Distance      float64            `json:"distance" bson:"distance"`
 	StartTime     string             `json:"startTime" bson:"startTime"`
 	EndTime       string             `json:"endTime" bson:"endTime"`
-	Dumptrucks    []string           `json:"dumptrucks" bson:"dumptrucks"`
+	DumptruckId   string             `json:"dumptruckId" bson:"dumptruckId"`
 }

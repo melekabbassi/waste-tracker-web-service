@@ -41,6 +41,7 @@ func generateApp() *fiber.App {
 	dumptruckGroup.Get("/", handlers.GetDumptrucks)
 	dumptruckGroup.Post("/", handlers.CreateDumptruck)
 	dumptruckGroup.Delete("/:id", handlers.DeleteDumptruck)
+	dumptruckGroup.Post("/route", handlers.CreateRoute)
 
 	// create the landfillsite group and routes
 	landfillsiteGroup := app.Group("/landfillsites")
